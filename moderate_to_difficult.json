@@ -1,0 +1,120 @@
+{
+  "Moderate to Difficult Shift": [
+    {
+      "Marks": "300 – 281",
+      "Percentile": "99.99-100"
+    },
+    {
+      "Marks": "280 – 271",
+      "Percentile": "99.90-99.99"
+    },
+    {
+      "Marks": "270 – 263",
+      "Percentile": "99.80-99.90"
+    },
+    {
+      "Marks": "262 – 250",
+      "Percentile": "99.70-99.80"
+    },
+    {
+      "Marks": "250 – 241",
+      "Percentile": "99.60-99.70"
+    },
+    {
+      "Marks": "240 – 231",
+      "Percentile": "99.50-99.60"
+    },
+    {
+      "Marks": "230 – 221",
+      "Percentile": "99.40-99.50"
+    },
+    {
+      "Marks": "220 – 211",
+      "Percentile": "99.30-99.40"
+    },
+    {
+      "Marks": "210 – 201",
+      "Percentile": "99.20-99.30"
+    },
+    {
+      "Marks": "200 – 191",
+      "Percentile": "99.10-99.20"
+    },
+    {
+      "Marks": "190 – 181",
+      "Percentile": "99.05-99.10"
+    },
+    {
+      "Marks": "180 – 171",
+      "Percentile": "99.00-99.05"
+    },
+    {
+      "Marks": "170 – 161",
+      "Percentile": "98.00-99.00"
+    },
+    {
+      "Marks": "160 – 151",
+      "Percentile": "97.00-98.00"
+    },
+    {
+      "Marks": "150 – 141",
+      "Percentile": "96.00-97.00"
+    },
+    {
+      "Marks": "140 – 131",
+      "Percentile": "95.00-96.00"
+    },
+    {
+      "Marks": "130 – 121",
+      "Percentile": "94.00-95.00"
+    },
+    {
+      "Marks": "120 – 111",
+      "Percentile": "93.00-94.00"
+    },
+    {
+      "Marks": "110 – 101",
+      "Percentile": "92.00-93.00"
+    },
+    {
+      "Marks": "100 – 91",
+      "Percentile": "90.00-92.00"
+    },
+    {
+      "Marks": "90 – 81",
+      "Percentile": "88.00-90.00"
+    },
+    {
+      "Marks": "80 – 71",
+      "Percentile": "80.00-88.00"
+    },
+    {
+      "Marks": "70 – 61",
+      "Percentile": "75.00-80.00"
+    },
+    {
+      "Marks": "60 – 51",
+      "Percentile": "60.00-70.00"
+    },
+    {
+      "Marks": "50 – 41",
+      "Percentile": "40.00-60.00"
+    },
+    {
+      "Marks": "40 – 31",
+      "Percentile": "30.00-40.00"
+    },
+    {
+      "Marks": "30 – 21",
+      "Percentile": "20.00-30.00"
+    },
+    {
+      "Marks": "20 – 11",
+      "Percentile": "10.00-20.00"
+    },
+    {
+      "Marks": "10 – 0",
+      "Percentile": "0.00-10.00"
+    }
+  ]
+}

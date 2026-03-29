@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JOSAA College Predictor — Find Your NIT / IIIT / GFTI</title>
+  <meta name="description" content="Predict your JEE Main rank and find the best NIT, IIIT, and GFTI colleges based on your percentile, category, and preferences using real JOSAA cutoff data." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════ TOPBAR ═══════════ -->
+  <header class="topbar">
+    <div class="topbar-inner">
+
+      <!-- Brand -->
+      <a class="brand" href="#" onclick="showPage('home'); return false;">
+        <div class="brand-logo">JP</div>
+        <div class="brand-name">
+          JOSAA Predictor
+          <span>JEE Mains · 2025</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="topbar-nav" id="desktopNav">
+        <button class="nav-btn active" id="navHome" onclick="showPage('home')">🏠 Home</button>
+        <button class="nav-btn" id="navPredictor" onclick="requireAuth('predictor')" style="display:none;">🔮 Predictor</button>
+        <button class="nav-btn" id="navHistory"   onclick="requireAuth('history')"  style="display:none;">📋 My Searches</button>
+      </nav>
+
+      <!-- Right side -->
+      <div class="topbar-right">
+        <!-- Theme toggle -->
+        <label class="toggle-wrap" title="Toggle dark mode">
+          <input type="checkbox" id="themeToggle" onchange="toggleTheme(this)" />
+          <div class="toggle-track">
+            <span>☀️</span><span>🌙</span>
+          </div>
+          <div class="toggle-knob"></div>
+        </label>
+
+        <!-- Logged-out: Auth button -->
+        <button class="btn btn-primary btn-sm" id="authBtnDesktop" onclick="showPage('auth')">Login / Register</button>
+
+        <!-- Logged-in: User pill -->
+        <div class="user-pill" id="userPillDesktop" style="display:none;">
+          <div class="avatar" id="avatarDesktop">?</div>
+          <span class="user-name" id="userNameDesktop"></span>
+          <button class="btn btn-ghost btn-sm logout-btn" onclick="handleLogout()">Logout</button>
+        </div>
+
+        <!-- Hamburger -->
+        <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════ MOBILE DRAWER ═══════════ -->
+  <div class="mob-nav" id="mobNav">
+    <div class="mob-nav-body">
+      <button class="nav-btn" onclick="closeMobNav(); showPage('home')">🏠 Home</button>
+      <button class="nav-btn" id="mobNavPredictor" onclick="closeMobNav(); requireAuth('predictor')" style="display:none;">🔮 Predictor</button>
+      <button class="nav-btn" id="mobNavHistory"   onclick="closeMobNav(); requireAuth('history')"  style="display:none;">📋 My Searches</button>
+      <button class="nav-btn" id="mobNavAuth"       onclick="closeMobNav(); showPage('auth')">🔐 Login / Register</button>
+    </div>
+    <div class="mob-nav-footer" id="mobNavFooter" style="display:none;">
+      <div class="mob-user-info">
+        <div class="mob-avatar" id="mobAvatar">?</div>
+        <div>
+          <div class="mob-user-name"  id="mobUserName"></div>
+          <div class="mob-user-email" id="mobUserEmail"></div>
+        </div>
+      </div>
+      <div class="mob-nav-actions">
+        <button class="btn btn-ghost btn-sm" onclick="closeMobNav(); handleLogout()">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ TOAST ═══════════ -->
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <!-- ════════════════════════════════════════════════════════
+       PAGE: HOME
+       ════════════════════════════════════════════════════════ -->
+  <div class="page active" id="pageHome">
+    <div class="wrap">
+
+      <!-- Hero Banner -->
+      <div class="hero-banner">
+        <h1>Find Your Dream College 🎓</h1>
+        <p>Enter your JEE Main percentile and get instant, data-driven predictions for <strong>NITs</strong>, <strong>IIITs</strong>, and <strong>GFTIs</strong> — powered by real JOSAA cutoff data.</p>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-num">110+</span>
+            <span class="hero-stat-lbl">Institutes</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">7000+</span>
+            <span class="hero-stat-lbl">Programs</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">4</span>
+            <span class="hero-stat-lbl">Shift Types</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <h2>Get Started</h2>
+      <div class="tools-grid">
+        <div class="tool-card" onclick="requireAuth('predictor')">
+          <div class="tool-icon red">🔮</div>
+          <div>
+            <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;">College Predictor</div>
+            <div class="muted" style="margin-top:3px;">Enter percentile → get matching colleges instantly</div>
+          </div>
+        </div>
+        <div class="tool-card" onclick="requireAuth('history')">
+          <div class="tool-icon blue">📋</div>
+          <div>
+            <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;">My Searches</div>
+            <div class="muted" style="margin-top:3px;">View your past predictions and saved results</div>
+          </div>
+        </div>
+        <div class="tool-card" onclick="showPage('auth')">
+          <div class="tool-icon green">🔐</div>
+          <div>
+            <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;">Login / Register</div>
+            <div class="muted" style="margin-top:3px;">Create a free account to access all features</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div class="card" style="margin-top:8px;">
+        <h2>How It Works</h2>
+        <div class="info-grid" style="margin-top:8px;">
+          <div class="info-block">
+            <div class="info-label">Step 1</div>
+            <div style="font-weight:700;font-size:13px;margin-top:4px;">Enter Percentile</div>
+            <div class="muted" style="margin-top:3px;font-size:12px;">Input your JEE Main percentile and shift difficulty</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Step 2</div>
+            <div style="font-weight:700;font-size:13px;margin-top:4px;">Set Preferences</div>
+            <div class="muted" style="margin-top:3px;font-size:12px;">Choose category, gender, institute type & branch</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Step 3</div>
+            <div style="font-weight:700;font-size:13px;margin-top:4px;">Get Predictions</div>
+            <div class="muted" style="margin-top:3px;font-size:12px;">AI maps your rank to real JOSAA cutoff data</div>
+          </div>
+          <div class="info-block">
+            <div class="info-label">Step 4</div>
+            <div style="font-weight:700;font-size:13px;margin-top:4px;">Choose Wisely</div>
+            <div class="muted" style="margin-top:3px;font-size:12px;">Filter Safe / Moderate / Dream colleges</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       PAGE: AUTH
+       ════════════════════════════════════════════════════════ -->
+  <div class="page" id="pageAuth">
+    <div class="auth-wrap">
+      <div class="auth-card">
+
+        <!-- Logo -->
+        <div class="auth-logo">
+          <div class="big-logo">JP</div>
+          <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:16px;">JOSAA Predictor</div>
+          <div class="muted" style="font-size:13px;margin-top:2px;">Your college. Your future.</div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-bar">
+          <button class="tab-item active" id="tabLogin"    onclick="switchAuthTab('login')">Login</button>
+          <button class="tab-item"        id="tabRegister" onclick="switchAuthTab('register')">Register</button>
+        </div>
+
+        <!-- LOGIN PANE -->
+        <div class="tab-pane active" id="paneLogin">
+          <form id="loginForm" onsubmit="handleLogin(event)">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="you@example.com" required autocomplete="email" />
+
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password" />
+
+            <div id="loginErr" class="err"></div>
+
+            <button type="submit" class="btn btn-primary btn-full" id="loginBtn" style="margin-top:16px;">
+              Login
+            </button>
+          </form>
+          <p class="muted" style="text-align:center;margin-top:14px;font-size:13px;">
+            No account? <a href="#" onclick="switchAuthTab('register')" style="color:var(--brand);font-weight:600;">Register free →</a>
+          </p>
+        </div>
+
+        <!-- REGISTER PANE -->
+        <div class="tab-pane" id="paneRegister">
+          <form id="registerForm" onsubmit="handleRegister(event)">
+            <label for="regName">Full Name</label>
+            <input type="text" id="regName" placeholder="Your full name" required />
+
+            <label for="regEmail">Email</label>
+            <input type="email" id="regEmail" placeholder="you@example.com" required autocomplete="email" />
+
+            <div class="field-row">
+              <div>
+                <label for="regContact">Contact Number</label>
+                <input type="tel" id="regContact" placeholder="10-digit number" pattern="[0-9]{10}" required />
+              </div>
+              <div>
+                <label for="regCity">City</label>
+                <input type="text" id="regCity" placeholder="Your city" required />
+              </div>
+            </div>
+
+            <label for="regPassword">Password</label>
+            <input type="password" id="regPassword" placeholder="Min 6 characters" minlength="6" required autocomplete="new-password" />
+
+            <label for="regConfirm">Confirm Password</label>
+            <input type="password" id="regConfirm" placeholder="Re-enter password" minlength="6" required autocomplete="new-password" />
+
+            <div id="regErr" class="err"></div>
+
+            <button type="submit" class="btn btn-primary btn-full" id="registerBtn" style="margin-top:16px;">
+              Create Account
+            </button>
+          </form>
+          <p class="muted" style="text-align:center;margin-top:14px;font-size:13px;">
+            Have an account? <a href="#" onclick="switchAuthTab('login')" style="color:var(--brand);font-weight:600;">Login →</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       PAGE: PREDICTOR
+       ════════════════════════════════════════════════════════ -->
+  <div class="page" id="pagePredictor">
+    <div class="wrap-md">
+
+      <div class="page-hdr">
+        <div>
+          <h1 class="page-title">🔮 College Predictor</h1>
+          <p class="muted">Fill in your details to find matching colleges from the JOSAA dataset.</p>
+        </div>
+      </div>
+
+      <!-- PREDICTOR CARD -->
+      <div class="predictor-card">
+        <div class="predictor-card-head">
+          <span style="font-size:18px;">📝</span>
+          <div>
+            <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:14px;">Enter Your Details</div>
+            <div class="muted" style="font-size:12px;">All fields are required for accurate predictions</div>
+          </div>
+        </div>
+
+        <div class="predictor-card-body">
+          <form id="predictorForm" onsubmit="handlePredict(event)">
+
+            <!-- Row 1: Percentile + Shift -->
+            <div class="form-grid-2">
+              <div>
+                <label for="inPercentile">JEE Main Percentile</label>
+                <input type="number" id="inPercentile" placeholder="e.g. 95.45" step="0.01" min="0" max="100" required />
+                <div class="help">Enter your official NTA percentile score</div>
+              </div>
+              <div>
+                <label for="inShift">Shift Difficulty</label>
+                <select id="inShift" required>
+                  <option value="" disabled selected>Select difficulty</option>
+                  <option value="easy_to_moderate">Easy to Moderate Shift</option>
+                  <option value="moderate">Moderate Shift</option>
+                  <option value="moderate_to_difficult">Moderate to Difficult Shift</option>
+                  <option value="difficult">Difficult Shift</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Row 2: Gender + Category + Home State -->
+            <div class="form-grid-3" style="margin-top:4px;">
+              <div>
+                <label for="inGender">Gender</label>
+                <select id="inGender" required>
+                  <option value="" disabled selected>Select gender</option>
+                  <option value="Gender-Neutral">Male (Gender-Neutral)</option>
+                  <option value="Female-only (including Supernumerary)">Female</option>
+                </select>
+              </div>
+              <div>
+                <label for="inCategory">Category</label>
+                <select id="inCategory" required>
+                  <option value="" disabled selected>Select category</option>
+                  <option value="OPEN">OPEN (General)</option>
+                  <option value="OBC-NCL">OBC-NCL</option>
+                  <option value="SC">SC</option>
+                  <option value="ST">ST</option>
+                  <option value="EWS">EWS</option>
+                </select>
+              </div>
+              <div>
+                <label for="inState">Home State</label>
+                <select id="inState" required>
+                  <option value="" disabled selected>Select state</option>
+                  <option value="Andhra Pradesh">Andhra Pradesh</option>
+                  <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                  <option value="Assam">Assam</option>
+                  <option value="Bihar">Bihar</option>
+                  <option value="Chhattisgarh">Chhattisgarh</option>
+                  <option value="Goa">Goa</option>
+                  <option value="Gujarat">Gujarat</option>
+                  <option value="Haryana">Haryana</option>
+                  <option value="Himachal Pradesh">Himachal Pradesh</option>
+                  <option value="Jharkhand">Jharkhand</option>
+                  <option value="Karnataka">Karnataka</option>
+                  <option value="Kerala">Kerala</option>
+                  <option value="Madhya Pradesh">Madhya Pradesh</option>
+                  <option value="Maharashtra">Maharashtra</option>
+                  <option value="Manipur">Manipur</option>
+                  <option value="Meghalaya">Meghalaya</option>
+                  <option value="Mizoram">Mizoram</option>
+                  <option value="Nagaland">Nagaland</option>
+                  <option value="Odisha">Odisha</option>
+                  <option value="Punjab">Punjab</option>
+                  <option value="Rajasthan">Rajasthan</option>
+                  <option value="Sikkim">Sikkim</option>
+                  <option value="Tamil Nadu">Tamil Nadu</option>
+                  <option value="Telangana">Telangana</option>
+                  <option value="Tripura">Tripura</option>
+                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  <option value="Uttarakhand">Uttarakhand</option>
+                  <option value="West Bengal">West Bengal</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                  <option value="Puducherry">Puducherry</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Row 3: Branch Group -->
+            <div style="margin-top:4px;">
+              <label for="inBranch">Branch Group</label>
+              <select id="inBranch" required>
+                <option value="" disabled selected>Select branch group</option>
+                <option value="computer">💻 Computer Branches (CSE, IT, AI, Data Science)</option>
+                <option value="electronics">📡 Electronics Branches (ECE, EEE, ENI)</option>
+                <option value="core">⚙️ Core Branches (Mechanical, Civil, Chemical)</option>
+                <option value="others">🔬 Others (All remaining branches)</option>
+              </select>
+            </div>
+
+            <!-- Row 4: Institute Type checkboxes -->
+            <div style="margin-top:8px;">
+              <label>Institute Type</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="instType" value="NIT" checked />
+                  🏛️ NIT
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="instType" value="IIIT" checked />
+                  💻 IIIT
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="instType" value="GFTI" />
+                  🏗️ GFTI
+                </label>
+              </div>
+              <div class="help">Select one or more institute types to include in results</div>
+            </div>
+
+            <div id="predictErr" class="err" style="display:none;"></div>
+
+            <button type="submit" class="btn btn-primary btn-full" id="predictBtn" style="margin-top:20px;padding:14px;">
+              🔮 Predict My Colleges
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- ═══════ RESULTS ═══════ -->
+      <div id="resultsSection" style="display:none;">
+
+        <!-- Summary bar -->
+        <div class="result-summary" id="resultSummary">
+          <div class="result-summary-stat">
+            <div class="rss-label">Percentile</div>
+            <div class="rss-value" id="rssPercentile">—</div>
+          </div>
+          <div class="result-summary-stat">
+            <div class="rss-label">Est. Marks</div>
+            <div class="rss-value" id="rssMarks">—</div>
+          </div>
+          <div class="result-summary-stat">
+            <div class="rss-label">Predicted Rank</div>
+            <div class="rss-value" id="rssRank">—</div>
+          </div>
+          <div class="result-summary-stat">
+            <div class="rss-label">Colleges Found</div>
+            <div class="rss-value" id="rssCount">—</div>
+          </div>
+        </div>
+
+        <!-- Filter chips -->
+        <div class="filter-bar">
+          <span class="filter-bar-label">Filter:</span>
+          <button class="fchip active" data-f="all"      onclick="applyFilter('all', this)">All</button>
+          <button class="fchip"        data-f="safe"     onclick="applyFilter('safe', this)">✅ Safe</button>
+          <button class="fchip"        data-f="moderate" onclick="applyFilter('moderate', this)">⚡ Moderate</button>
+          <button class="fchip"        data-f="dream"    onclick="applyFilter('dream', this)">🌟 Dream</button>
+          <button class="btn btn-ghost btn-sm" onclick="exportResults()" style="margin-left:auto;">⬇️ Export</button>
+        </div>
+
+        <!-- Cards grid -->
+        <div class="col-grid" id="resultsGrid"></div>
+
+        <!-- Empty state -->
+        <div class="empty" id="emptyState" style="display:none;">
+          <div class="empty-icon">😔</div>
+          <h3>No Colleges Found</h3>
+          <p>Try adjusting your filters — widen institute type, branch, or category.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       PAGE: HISTORY
+       ════════════════════════════════════════════════════════ -->
+  <div class="page" id="pageHistory">
+    <div class="wrap-md">
+      <div class="page-hdr">
+        <div>
+          <h1 class="page-title">📋 My Searches</h1>
+          <p class="muted">Your past prediction searches are saved here.</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="clearHistory()">🗑️ Clear All</button>
+      </div>
+
+      <div id="historyList">
+        <div class="empty">
+          <div class="empty-icon">📭</div>
+          <h3>No searches yet</h3>
+          <p>Run your first prediction to see results here.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       LOADING OVERLAY (full-page spinner)
+       ════════════════════════════════════════════════════════ -->
+  <div class="overlay" id="loadingOverlay">
+    <div class="modal" style="max-width:260px;text-align:center;padding:32px 24px;">
+      <div class="spinner" style="margin:0 auto 16px;"></div>
+      <div style="font-family:'Poppins',sans-serif;font-weight:700;font-size:15px;">Analysing Colleges…</div>
+      <div class="muted" style="margin-top:6px;font-size:13px;">Matching you to JOSAA data</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
